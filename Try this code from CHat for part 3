@@ -1,3 +1,5 @@
+/workspaces/BAE310_Lab10/.venv/bin/python -m streamlit run streamlit_app.py
+
 # ============================================================
 # Import required libraries
 import streamlit as st
