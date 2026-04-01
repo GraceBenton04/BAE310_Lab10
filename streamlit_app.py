@@ -1,5 +1,9 @@
 # ============================================================
 # Import required libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.express as px
+from datetime import datetime
 import streamlit as st
 import pandas as pd
 import folium
@@ -98,5 +102,29 @@ if len(merged_data) > 0:
     
     # Display the map
     st_folium(m, width=700, height=500)
+    
+    # --------------------------------------------------------
+    # Display trend plot over time
+    # --------------------------------------------------------
+    st.subheader(f'{selected_characteristic} vs Time')
+    
+    # Create the plot
+    fig, ax = plt.subplots(figsize=(12, 6))
+    
+    # Plot each station's data
+    for station_id in final_results['MonitoringLocationIdentifier'].unique():
+        station_data = final_results[final_results['MonitoringLocationIdentifier'] == station_id].sort_values('ActivityStartDate')
+        station_name = station_data['OrganizationFormalName'].iloc[0] if 'OrganizationFormalName' in station_data.columns else station_id
+        ax.plot(station_data['ActivityStartDate'], station_data['ResultMeasureValue'], marker='o', label=station_name, alpha=0.7)
+    
+    ax.set_xlabel('Date')
+    ax.set_ylabel(f'{selected_characteristic} (Value)')
+    ax.set_title(f'{selected_characteristic} vs Time')
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    ax.grid(True, alpha=0.3)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    
+    st.pyplot(fig)
 else:
     st.warning('No data found for the selected filters.')
