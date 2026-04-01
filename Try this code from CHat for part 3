@@ -1,0 +1,56 @@
+# ============================================================
+    # Load both datasets
+    station_df = pd.read_csv(station_file)
+    results_df = pd.read_csv(result_file)
+
+    # Convert the date column into datetime format
+    results_df['ActivityStartDate'] = pd.to_datetime(
+        results_df['ActivityStartDate']
+    )
+
+    # Convert measurement values into numeric values
+    results_df['ResultMeasureValue'] = pd.to_numeric(
+        results_df['ResultMeasureValue'], errors='coerce')
+
+    # Remove rows that do not contain a valid value
+    results_df = results_df.dropna(subset=['ResultMeasureValue'])
+
+    # --------------------------------------------------------
+    # Create a dropdown list of available characteristics
+    # --------------------------------------------------------
+    characteristic_list = sorted(
+        results_df['CharacteristicName'].dropna().unique()
+    )
+
+    selected_characteristic = st.selectbox(
+        'Choose a water quality characteristic:',
+        characteristic_list
+    )
+
+    # --------------------------------------------------------
+    # Filter data to only the selected characteristic
+    # --------------------------------------------------------
+    filtered_results = results_df[
+        results_df['CharacteristicName'] == selected_characteristic
+    ]
+
+    # --------------------------------------------------------
+    # Create sliders for the value range
+    # --------------------------------------------------------
+    min_value = float(filtered_results['ResultMeasureValue'].min())
+    max_value = float(filtered_results['ResultMeasureValue'].max())
+
+    selected_range = st.slider(
+        'Select measurement value range:',
+        min_value=min_value,
+        max_value=max_value,
+        value=(min_value, max_value)
+    )
+
+    # --------------------------------------------------------
+    # Create date inputs for the date range
+    # --------------------------------------------------------
+    min_date = filtered_results['ActivityStartDate'].min().date()
+    max_date = filtered_results['ActivityStartDate'].max().date()
+
+    start_date = st.date_input('Start Date', min_date)
