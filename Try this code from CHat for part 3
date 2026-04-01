@@ -1,4 +1,11 @@
 # ============================================================
+# Import required libraries
+import streamlit as st
+import pandas as pd
+import folium
+from streamlit_folium import st_folium
+import matplotlib.pyplot as plt
+
     # Load both datasets
     station_df = pd.read_csv(station_file)
     results_df = pd.read_csv(result_file)
