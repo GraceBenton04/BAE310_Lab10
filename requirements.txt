@@ -1,8 +1,8 @@
-numpy as np - for numerical calculations
-matplotlib.pyplot as plt - for charts
-plotly.express as px - for interactive visualizations
-datetime - for date handling
-streamlit as st - for the app
-pandas as pd - for data manipulation
-folium - for mapping
-streamlit_folium - to display maps
+numpy
+matplotlib
+plotly
+datetime
+streamlit
+pandas
+folium
+streamlit_folium
